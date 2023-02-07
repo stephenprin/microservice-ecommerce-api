@@ -1,28 +1,31 @@
 import { ProductService } from '../services/product-service';
 
-import express, { Request, Response,NextFunction } from 'express';
+import express, { Request, Response, NextFunction } from 'express';
+import { userAuth } from './middleware/auth'
 
 
 export const Product = (app:express.Application)=>{
     const productService = new ProductService();
-    app.post('/product/create', async (req: Request, res: Response,next:NextFunction) => { 
+    app.post('/create', userAuth, async (req: Request, res: Response,next:NextFunction) => { 
         try {
-            const {name,
+            const { name,
                 price,
-                description,
-                image,
-                category,
-                quantity,
+                type,
+                desc,
+                banner,
+                unit,
                 available,
-                supplier,
+                suplier
              } = req.body;
-            const product = await productService.Create({ name,price,
-                description,
-                image,
-                category,
-                quantity,
+            const product = await productService.Create({
+                name,
+                price,
+                type,
+                desc,
+                banner,
+                unit,
                 available,
-                supplier, });
+                suplier });
             return res.status(201).json(product);
         } catch (error) {
             next(error)

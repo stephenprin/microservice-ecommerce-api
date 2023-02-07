@@ -10,25 +10,25 @@ export class ProductService{
         this.productRepository = new ProductRepository;
     }
     async Create(productInput:IProduct) {
-        const {   name,
+        const {    name,
             price,
-            description,
-            image,
-            category,
-            quantity,
+            type,
+            desc,
+            banner,
+            unit,
             available,
-            supplier } = productInput;
+            suplier} = productInput;
         try {
             
             const product = await this.productRepository.createProduct({
                 name,
-                price,
-                description,
-                image,
-                category,
-                quantity,
-                available,
-                supplier
+        price,
+        type,
+        desc,
+        banner,
+        unit,
+        available,
+        suplier
 
             });
             

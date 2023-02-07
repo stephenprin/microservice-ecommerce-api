@@ -4,24 +4,24 @@ export class ProductRepository {
     async createProduct({
         name,
         price,
-        description,
-        image,
-        category,
-        quantity,
+        type,
+        desc,
+        banner,
+        unit,
         available,
-        supplier
+        suplier
     
     }: ProductInterface) {
         try {
             const createProduct = await Product.create({
                 name,
                 price,
-                description,
-                image,
-                category,
-                quantity,
+                type,
+                desc,
+                banner,
+                unit,
                 available,
-                supplier
+                suplier
 
         
             });

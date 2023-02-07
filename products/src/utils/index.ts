@@ -32,6 +32,7 @@ export async function validateSignature(req:Request | any) {
         
     } catch (error) {
         return error;
+        return false;
     }
 }
 

@@ -3,24 +3,24 @@ import mongoose from "mongoose";
  export interface ProductInterface{
      name: string;
      price: number;
-     description: string;
-     image: string;
-     category: string;
-     quantity: number;
+     desc: string;
+     banner: string;
      available: boolean;
-     supplier: string;
+     suplier: string;
+     unit: number,
+     type: string
      
 }
 
 const ProductSchema = new mongoose.Schema({
     name: String,
     price: Number,
-    description: String,
-    image: String,
-    category: String,
-    quantity: Number,
+    desc: String,
+    banner: String,
     available: Boolean,
-    supplier: String,
+    suplier: String,
+    unit: String,
+    type: String
 
    
 

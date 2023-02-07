@@ -1,10 +1,10 @@
 export interface IProduct{
-    name: string;
-    price: number;
-    description: string;
-    image: string;
-    category: string;
-    quantity: number;
-    available: boolean;
-    supplier: string;
+    name: string,
+    price: number,
+    type: string,
+    desc: string,
+    banner: string,
+    unit: number,
+    available: boolean,
+    suplier: string
 }
