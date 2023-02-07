@@ -3,4 +3,11 @@ export interface IUser{
     name: string;
     password: string;
     phone: string;
+   
+  
+}
+
+export interface IUserSignIn { 
+    email: string;
+    password: string;
 }

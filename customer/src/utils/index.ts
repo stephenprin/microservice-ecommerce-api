@@ -22,14 +22,19 @@ export async function FormatData(data: unknown) {
    }
 }
 
+export async function validatePassword(enteredPassword: string, savedPassword: string, salt:string) {
+    return await HashPassword(enteredPassword, salt)===savedPassword;
+}
+
 export async function validateSignature(req:Request | any) {
     try {
         const token = req.headers.authorization.split(' ')[1];
         const decoded = jwt.verify(token, JWT_SECRET);
         req.userData = decoded;
-        return decoded;
+        return true;
         
     } catch (error) {
         return error;
     }
 }
+
