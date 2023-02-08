@@ -1,4 +1,4 @@
-import { SignatureKind } from 'typescript';
+
 import { CustomerRepository } from '../database';
 import { FormatData, GenerateSalt, GenerateSignature, HashPassword, validatePassword } from '../utils';
 import { IUser, IUserSignIn } from './customer-service-dto';
