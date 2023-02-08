@@ -27,7 +27,8 @@ export class CustomerService{
                 name,
                 password: userHashedPassword,
                 phone,
-                salt
+                salt,
+                cart:[]
                 
             });
             const token = await GenerateSignature({ email, });

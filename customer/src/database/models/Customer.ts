@@ -6,7 +6,7 @@ export interface CustomerInterface {
     password: string;
     phone: string;
     salt: string;
-    // cart: Array<Object>
+   cart: Array<Object>
 }
 
 const CustomerSchema = new mongoose.Schema({
@@ -17,18 +17,20 @@ const CustomerSchema = new mongoose.Schema({
     salt: String,
 
 
-    // cart: [
-    //     {
-    //         product: {
-    //             id: { type: String, required: true },
-    //             name: { type: String },
-    //             price: { type: Number },
-    //             image: { type: String },
-    //         },{
-    //             quantity: { type: Number, default: 1 },
-    //         }
-    //     }
-    // ]
+    cart: [
+        {
+            product: {
+                id: { type: String, required: true },
+                name: { type: String },
+                price: { type: Number },
+                banner: { type: String },
+            },
+            unit:{
+                type: Number,
+                required: true
+            }
+        }
+    ]
     
 }, {
     toJSON: {

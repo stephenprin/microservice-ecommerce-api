@@ -6,7 +6,7 @@ export class CustomerRepository {
         name,
         password,
         phone,
-        salt
+        salt,
     
     }: CustomerInterface) {
         try {
