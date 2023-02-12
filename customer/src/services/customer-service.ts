@@ -1,5 +1,6 @@
 
 import { CustomerRepository } from '../database';
+import { ItemProduct } from '../database/respository/customer-respository-dto';
 import { FormatData, GenerateSalt, GenerateSignature, HashPassword, validatePassword } from '../utils';
 import { IUser, IUserSignIn } from './customer-service-dto';
 
@@ -71,6 +72,22 @@ export class CustomerService{
 
     
     
+    }
+
+    async ManageCart(customerId:string, productId:any, qty:number, isRemove:boolean) {
+        
+            const cartResult = await this.customerRepository.AddToCart(customerId, productId, qty, isRemove);
+            return cartResult
+    }
+
+    async SubscribeEvent(payload:any) {
+        payload = JSON.parse(payload);
+        const { event, data } = payload;
+        const{ customerId, productId, qty, isRemove } = data;
+        
+        if (event === 'ADD_TO_CART') {
+            this.ManageCart(customerId, productId, qty, false)
+        }
     }
 }
 
