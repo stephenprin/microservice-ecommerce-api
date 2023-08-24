@@ -1,7 +1,10 @@
-import { Customer,CustomerInterface } from '../models';
+import { Address, Customer } from '../models';
+import { AddressInterface } from '../models/DTOs/address-dto';
+import { CustomerInterface } from '../models/DTOs/customer-dto';
 import { IProduct } from './customer-respository-dto';
 
 export class CustomerRepository {
+   
     async createCustomer({
         email,
         name,
@@ -22,13 +25,64 @@ export class CustomerRepository {
             return createCustomer;
         } catch (error) {
             console.log(error, ":Error creating customer")
-       
+        
         }
     }
 
-    async findCustomerByEmail(email: string) { 
-        const exitingCustomer = await Customer.findOne({ email });
+    async createAddress({id, street,
+        postalCode,
+        city,
+        country }: AddressInterface) {
+        
+        try {
+            const user = await Customer.findById(id)
+            if (user) {
+
+                const newAddress = new Address({
+                    street,
+                    postalCode,
+                    city,
+                    country
+                })
+                console.log(newAddress)
+                await newAddress?.save();
+                user.address?.push(newAddress)
+
+                 await user?.save()
+                return user;
+            }else {
+                throw new Error(`User not found with id: ${id}`);
+            }
+            
+        
+            
+            
+        } catch (error:any) {
+            throw new Error(`Error encountered creating address ${error}`);
+        }
+        
+    }
+    async FindCustomer(email: string) {
+        try {
+            const exitingCustomer = await Customer.findOne({ email })
+            
+            return exitingCustomer
+        } catch (error) {
+            throw new Error(`Email not found`)
+        }
+    }
+    async findCustomerById(id :string) { 
+        const exitingCustomer = await Customer.findById({ id }).populate('address');
         return exitingCustomer;
+    }
+
+    async WishList(customerId: string) {
+        try {
+            const user = await Customer.findById(customerId).populate('wishlist')
+            return user?.wishlist
+        } catch (error) {
+            throw new Error(`Error encountered populating wishlist`);
+        }
     }
    
     async AddToCart(customerId: string, {
