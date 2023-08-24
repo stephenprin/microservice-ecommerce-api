@@ -36,25 +36,21 @@ export class CustomerRepository {
         
         try {
             const user = await Customer.findById(id)
-            if (user) {
-
-                const newAddress = new Address({
-                    street,
-                    postalCode,
-                    city,
-                    country
-                })
-                console.log(newAddress)
-                await newAddress?.save();
-                user.address?.push(newAddress)
-
-                 await user?.save()
-                return user;
-            }else {
+            if (!user) {
                 throw new Error(`User not found with id: ${id}`);
             }
-            
-        
+            const newAddress = new Address({
+                street,
+                postalCode,
+                city,
+                country
+            });
+    
+            await newAddress.save();
+            user.address?.push(newAddress.id);
+    
+            await user.save();
+            return user;
             
             
         } catch (error:any) {
@@ -84,6 +80,7 @@ export class CustomerRepository {
             throw new Error(`Error encountered populating wishlist`);
         }
     }
+
    
     async AddToCart(customerId: string, {
         _id, name, price,banner
