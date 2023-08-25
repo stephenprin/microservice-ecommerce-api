@@ -1,8 +1,14 @@
 export interface IProduct{
-    _id: string,
+    id: string,
     name: string,
     price: number,
     banner: string,
+}
+
+export interface IWishList extends IProduct{
+   
+        description:string
+        available:boolean
 }
 
 export interface ItemProduct{

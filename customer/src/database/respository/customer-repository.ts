@@ -1,7 +1,7 @@
 import { Address, Customer } from '../models';
 import { AddressInterface } from '../models/DTOs/address-dto';
 import { CustomerInterface } from '../models/DTOs/customer-dto';
-import { IProduct } from './customer-respository-dto';
+import { IProduct, IWishList } from './customer-respository-dto';
 
 export class CustomerRepository {
    
@@ -81,14 +81,54 @@ export class CustomerRepository {
         }
     }
 
+    async AddWishList(customerId: string, {
+        id,
+        name,
+        price,
+        banner,
+        description,
+        available }: IWishList) {
+        
+            const product = {
+                id,name,price,banner,description,available
+            }
+        try {
+          
+            const profile = await Customer.findById(customerId).populate('wishlist');
+
+        if (profile) {
+            let wishlist = profile.wishlist
+            if (wishlist.length > 0) { 
+                let isExit = false;
+
+                wishlist.map((item) => {
+                    if (item.id.toString() === product.id.toString()) {
+                        const index = wishlist.indexOf(item);
+                        wishlist.splice(index, 1);
+                        isExit = true;
+                    }
+                });
+                if (!isExit) { 
+                    wishlist.push(product);
+                }
+            }
+        }
+            
+        } catch (error) {
+            throw new Error("unable to add to cart wishlist");
+        }
+
+        
+    }
+
    
     async AddToCart(customerId: string, {
-        _id, name, price,banner
+        id, name, price,banner
     }:IProduct, qty:number, isRemove:boolean) { 
-        const profile = await Customer.findById(customerId).populate('cart');
+        const profile = await Customer.findById(customerId).populate('wishlist');
         if (profile) {
             const cartItem = {
-                product: {_id, name, price, banner  },
+                product: {id, name, price, banner  },
                 unit: qty
             };
             let cartItems = profile.cart;
