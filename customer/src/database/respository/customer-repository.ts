@@ -1,7 +1,7 @@
 import { Address, Customer } from '../models';
 import { AddressInterface } from '../models/DTOs/address-dto';
 import { CustomerInterface } from '../models/DTOs/customer-dto';
-import { IProduct, IWishList } from './customer-respository-dto';
+import { IOrder, IProduct, IWishList, ItemProduct } from './customer-respository-dto';
 
 export class CustomerRepository {
    
@@ -111,8 +111,14 @@ export class CustomerRepository {
                 if (!isExit) { 
                     wishlist.push(product);
                 }
+            }else{
+                wishlist.push(product);
             }
+
+            profile.wishlist = wishlist;
         }
+            const profileResult = await profile?.save()
+            return profileResult
             
         } catch (error) {
             throw new Error("unable to add to cart wishlist");
@@ -122,12 +128,13 @@ export class CustomerRepository {
     }
 
    
-    async AddToCart(customerId: string, {
+    async AddToCart(customerId: string,  {
         id, name, price,banner
     }:IProduct, qty:number, isRemove:boolean) { 
-        const profile = await Customer.findById(customerId).populate('wishlist');
+        const profile = await Customer.findById(customerId).populate('cart');
         if (profile) {
-            const cartItem = {
+
+            const cartItem:ItemProduct = {
                 product: {id, name, price, banner  },
                 unit: qty
             };
@@ -135,7 +142,7 @@ export class CustomerRepository {
             if (cartItems.length > 0) {
                 let isExist = false;
                 cartItems.map((item:any) => { 
-                    if (item.product._id.toString() === _id.toString()) {
+                    if (item.product.id.toString() === cartItem.product.id.toString()) {
                         if (isRemove) {
                             cartItems.splice(cartItems.indexOf(item), 1);
                         } else {
@@ -146,14 +153,38 @@ export class CustomerRepository {
                 });
                 if(!isExist) {
                     cartItems.push(cartItem);
-                } else {
-                   cartItems.push(cartItem);
                 }
                 profile.cart = cartItems;
                 const cartSaveResult = await profile.save();
                 return cartSaveResult;
             }
             throw new Error("unable t add to cart");
+        }
+    }
+
+    async AddOrderToProfile(customerId: string, {id, amount, date}:IOrder) {
+        try {
+            const order = {
+                id,
+                amount,
+                date
+            }
+            const profile = await Customer.findById(customerId).populate('order');
+
+            if (profile) {
+                if (profile.orders == undefined) {
+                    profile.orders =[]
+                }
+                profile.orders.push(order)
+                profile.cart = []
+                
+                const profileResult = await profile.save()
+                return profileResult
+            } else {
+                throw new Error("Unable to add order")
+            }
+        } catch (error) {
+            throw new Error('Unable to create customer')
         }
     }
 }
