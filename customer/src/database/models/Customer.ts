@@ -5,6 +5,7 @@ import { CustomerInterface } from "./DTOs/customer-dto";
 
 
 const CustomerSchema = new mongoose.Schema({
+    id:String,
     email: String,
     name: String,
     password: String,

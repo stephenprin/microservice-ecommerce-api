@@ -98,7 +98,7 @@ export class CustomerRepository {
 
         if (profile) {
             let wishlist = profile.wishlist
-            if (wishlist.length > 0) { 
+            if (wishlist.length > 0 ) { 
                 let isExit = false;
 
                 wishlist.map((item) => {
@@ -169,7 +169,7 @@ export class CustomerRepository {
                 amount,
                 date
             }
-            const profile = await Customer.findById(customerId).populate('order');
+            const profile = await Customer.findById(customerId)
 
             if (profile) {
                 if (profile.orders == undefined) {
